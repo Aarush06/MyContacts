@@ -5,6 +5,9 @@ let goBtnEl = document.getElementById('go-btn');
 let menuEl = document.getElementById('menu');
 let outputEl = document.getElementById('output');
 
+let contacts = loadContacts()
+displayContacts();
+
 // Go Btn - Menu Listener
 goBtnEl.addEventListener('click', goBtnHandler);
 
@@ -27,21 +30,49 @@ function goBtnHandler() {
 
 // MENU FUNCTIONS
 function displayContacts() {
-  console.log('Display Contacts');
+  let outputStr = ""
+  for (let i = 0; i < contacts.length; i++) {
+    outputStr += `${contacts[i]}<hr>`
+  }
+  outputEl.innerHTML = outputStr;
 }
 
 function addContact() {
-  console.log('Add Contact');
+  let addContactPrompt = prompt("Enter contact details: email,name,phone number, country");
+  contacts.push(addContactPrompt);
+  outputEl.innerHTML = ("Contact has been added!")
+  saveContacts();
 }
 
 function removeContact() {
-  console.log('Remove Contact');
+  let index = +prompt("Enter number of task:");
+  if (index >= 0 && index < contacts.length) {
+    contacts.splice(index, 1);
+    saveContacts();
+    displayContacts();
+  } else alert("Invalid task number");
+
 }
 
 function displayByName() {
-  console.log('Display by Name');
+  let nameContact = prompt("Enter contact name:")
+  let outputStr = "";
+  for (let i = 0; i < contacts.length; i++) {
+    if (contacts[i].name === nameContact) {
+      outputStr += `${contacts[i]}`
+    }
+  }
 }
 
 function displayByCountry() {
   console.log('Display by Country');
+}
+
+function saveContacts() {
+  localStorage.setItem('contacts', JSON.stringify(contacts));
+}
+
+function loadContacts() {
+  let tasksStr = localStorage.getItem('contacts');
+  return JSON.parse(tasksStr) ?? [];
 }
